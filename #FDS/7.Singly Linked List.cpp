@@ -1,108 +1,171 @@
-def accept_roll():
-    roll_no = []
-    no_of_students = int(input("Enter the number of students: "))
-    for i in range(no_of_students):
-        roll_no.append(int(input("Enter Roll Number of Student {0}: ".format(i + 1))))
-    return roll_no
+#include <iostream>
+#include <vector>
 
-# Printing the Roll Numbers of the Students
-def print_roll(roll_no):
-    for i in range(len(roll_no)):
-        print(roll_no[i])
+using namespace std;
 
-# Insertion Sort for Sorting the list of Roll Numbers
-def insertion_sort(roll_no):
-    for i in range(1, len(roll_no)):
-        key = roll_no[i]
-        j = i - 1
-        while j >= 0 and key < roll_no[j]:
-            roll_no[j + 1] = roll_no[j]
-            j -= 1
-        roll_no[j + 1] = key
-    return roll_no
+// Function to accept roll numbers
+vector<int> acceptRoll() {
+    vector<int> rollNumbers;
+    int numberOfStudents;
 
-# Function for performing Non-Recursive Ternary Search
-def NR_Ternary_Search(roll, roll_find):
-    left = 0
-    right = len(roll) - 1
-    while left <= right:
-        mid1 = left + (right - left) // 3
-        mid2 = left + 2 * (right - left) // 3
-        if roll_find == roll[left]:
-            return left
-        elif roll_find == roll[right]:
-            return right
-        elif roll_find < roll[left] or roll_find > roll[right]:
-            return -1
-        elif roll_find <= roll[mid1]:
-            right = mid1
-        elif roll_find > roll[mid1] and roll_find <= roll[mid2]:
-            left = mid1 + 1
-            right = mid2
-        else:
-            left = mid2 + 1
-    return -1
+    cout << "Enter the number of students: ";
+    cin >> numberOfStudents;
 
-# Function for performing Recursive Ternary Search
-def R_Ternary_Search(roll, left, right, roll_find):
-    if right >= left:
-        mid1 = left + (right - left) // 3
-        mid2 = right - (right - left) // 3
-        if roll[mid1] == roll_find:
-            return mid1
-        if roll[mid2] == roll_find:
-            return mid2
-        if roll_find < roll[mid1]:
-            return R_Ternary_Search(roll, left, mid1 - 1, roll_find)
-        elif roll_find > roll[mid2]:
-            return R_Ternary_Search(roll, mid2 + 1, right, roll_find)
-        else:
-            return R_Ternary_Search(roll, mid1 + 1, mid2 - 1, roll_find)
-    return -1
+    for (int i = 0; i < numberOfStudents; ++i) {
+        int rollNumber;
+        cout << "Enter Roll Number of Student " << i + 1 << ": ";
+        cin >> rollNumber;
+        rollNumbers.push_back(rollNumber);
+    }
 
-# Main
-unsort_Roll = []
-sort_Roll = []
-flag = 1
+    return rollNumbers;
+}
 
-while flag == 1:
-    print("\n---------------------MENU---------------------")
-    print("1. Accept Student Roll Numbers")
-    print("2. Display the Roll Numbers of Student")
-    print("3. Sort Roll Numbers from the list")
-    print("4. Perform Non-Recursive Ternary Search")
-    print("5. Perform Recursive Ternary Search")
-    print("6. Exit\n")
+// Function to print roll numbers
+void printRoll(const vector<int>& rollNumbers) {
+    for (int i = 0; i < rollNumbers.size(); ++i) {
+        cout << rollNumbers[i] << endl;
+    }
+}
 
-    ch = int(input("Enter your choice (from 1 to 6): "))
+// Insertion Sort for Sorting the list of Roll Numbers
+vector<int> insertionSort(vector<int> rollNumbers) {
+    for (int i = 1; i < rollNumbers.size(); ++i) {
+        int key = rollNumbers[i];
+        int j = i - 1;
 
-    if ch == 1:
-        unsort_Roll = accept_roll()
-    elif ch == 2:
-        print_roll(unsort_Roll)
-    elif ch == 3:
-        print("Elements after performing Insertion Sort:\n")
-        sort_Roll = insertion_sort(unsort_Roll)
-        print_roll(sort_Roll)
-    elif ch == 4:
-        find_roll = int(input("Enter the Roll Number to be searched: "))
-        index = NR_Ternary_Search(sort_Roll, find_roll)
-        if index != -1:
-            print("The Roll Number", find_roll, "is found at position", index + 1)
-        else:
-            print("Roll Number", find_roll, "not found!!")
-    elif ch == 5:
-        find_roll = int(input("Enter the Roll Number to be searched: "))
-        left = 0
-        right = len(sort_Roll) - 1
-        index = R_Ternary_Search(sort_Roll, left, right, find_roll)
-        if index != -1:
-            print("The Roll Number", find_roll, "is found at position", index + 1)
-        else:
-            print("Roll Number", find_roll, "not found!!")
-    elif ch == 6:
-        print("Thanks for using this program!!")
-        flag = 0
-    else:
-        print("Wrong choice!!")
-        flag = 0
+        while (j >= 0 && key < rollNumbers[j]) {
+            rollNumbers[j + 1] = rollNumbers[j];
+            --j;
+        }
+
+        rollNumbers[j + 1] = key;
+    }
+
+    return rollNumbers;
+}
+
+// Function for performing Non-Recursive Ternary Search
+int nonRecursiveTernarySearch(const vector<int>& rollNumbers, int rollToFind) {
+    int left = 0;
+    int right = rollNumbers.size() - 1;
+
+    while (left <= right) {
+        int mid1 = left + (right - left) / 3;
+        int mid2 = left + 2 * (right - left) / 3;
+
+        if (rollToFind == rollNumbers[left]) {
+            return left;
+        } else if (rollToFind == rollNumbers[right]) {
+            return right;
+        } else if (rollToFind < rollNumbers[left] || rollToFind > rollNumbers[right]) {
+            return -1;
+        } else if (rollToFind <= rollNumbers[mid1]) {
+            right = mid1;
+        } else if (rollToFind > rollNumbers[mid1] && rollToFind <= rollNumbers[mid2]) {
+            left = mid1 + 1;
+            right = mid2;
+        } else {
+            left = mid2 + 1;
+        }
+    }
+
+    return -1;
+}
+
+// Function for performing Recursive Ternary Search
+int recursiveTernarySearch(const vector<int>& rollNumbers, int left, int right, int rollToFind) {
+    if (right >= left) {
+        int mid1 = left + (right - left) / 3;
+        int mid2 = right - (right - left) / 3;
+
+        if (rollNumbers[mid1] == rollToFind) {
+            return mid1;
+        }
+
+        if (rollNumbers[mid2] == rollToFind) {
+            return mid2;
+        }
+
+        if (rollToFind < rollNumbers[mid1]) {
+            return recursiveTernarySearch(rollNumbers, left, mid1 - 1, rollToFind);
+        } else if (rollToFind > rollNumbers[mid2]) {
+            return recursiveTernarySearch(rollNumbers, mid2 + 1, right, rollToFind);
+        } else {
+            return recursiveTernarySearch(rollNumbers, mid1 + 1, mid2 - 1, rollToFind);
+        }
+    }
+
+    return -1;
+}
+
+int main() {
+    vector<int> unsortedRoll;  // Move the declaration outside the switch statement
+    int choice = 1;
+
+    while (choice == 1) {
+        cout << "\n---------------------MENU---------------------" << endl;
+        cout << "1. Accept Student Roll Numbers" << endl;
+        cout << "2. Display the Roll Numbers of Student" << endl;
+        cout << "3. Sort Roll Numbers from the list" << endl;
+        cout << "4. Perform Non-Recursive Ternary Search" << endl;
+        cout << "5. Perform Recursive Ternary Search" << endl;
+        cout << "6. Exit" << endl;
+
+        cout << "\nEnter your choice (from 1 to 6): ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                unsortedRoll = acceptRoll();
+                break;
+            }
+            case 2: {
+                printRoll(unsortedRoll);
+                break;
+            }
+            case 3: {
+                cout << "Elements after performing Insertion Sort:" << endl;
+                vector<int> sortedRoll = insertionSort(unsortedRoll);
+                printRoll(sortedRoll);
+                break;
+            }
+            case 4: {
+                int findRoll;
+                cout << "Enter the Roll Number to be searched: ";
+                cin >> findRoll;
+                int indexNR = nonRecursiveTernarySearch(unsortedRoll, findRoll);
+                if (indexNR != -1) {
+                    cout << "The Roll Number " << findRoll << " is found at position " << indexNR + 1 << endl;
+                } else {
+                    cout << "Roll Number " << findRoll << " not found!!" << endl;
+                }
+                break;
+            }
+            case 5: {
+                int findRollRec;
+                cout << "Enter the Roll Number to be searched: ";
+                cin >> findRollRec;
+                int left = 0;
+                int right = unsortedRoll.size() - 1;
+                int indexR = recursiveTernarySearch(unsortedRoll, left, right, findRollRec);
+                if (indexR != -1) {
+                    cout << "The Roll Number " << findRollRec << " is found at position " << indexR + 1 << endl;
+                } else {
+                    cout << "Roll Number " << findRollRec << " not found!!" << endl;
+                }
+                break;
+            }
+            case 6:
+                cout << "Thanks for using this program!!" << endl;
+                choice = 0;
+                break;
+            default:
+                cout << "Wrong choice!!" << endl;
+                choice = 0;
+                break;
+        }
+    }
+
+    return 0;
+}
