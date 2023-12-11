@@ -1,0 +1,85 @@
+#include <iostream>
+using namespace std;
+
+// Node structure for the linked list
+struct ClubMember {
+    int id;
+    string name;
+    ClubMember* next;
+};
+
+// Class for the linked list operations
+class ClubMemberList {
+private:
+    ClubMember* head;
+
+public:
+    // Constructor to initialize an empty list
+    ClubMemberList() : head(nullptr) {}
+
+    // Function to add a new member to the list
+    void addMember(int id, const string& name) {
+        ClubMember* newMember = new ClubMember;
+        newMember->id = id;
+        newMember->name = name;
+        newMember->next = nullptr;
+
+        if (head == nullptr) {
+            head = newMember;
+        } else {
+            ClubMember* temp = head;
+            while (temp->next != nullptr) {
+                temp = temp->next;
+            }
+            temp->next = newMember;
+        }
+
+        cout << "Member added successfully." << endl;
+    }
+
+    // Function to display all members in the list
+    void displayMembers() {
+        if (head == nullptr) {
+            cout << "No members in the list." << endl;
+            return;
+        }
+
+        ClubMember* temp = head;
+        cout << "Club Members:" << endl;
+        while (temp != nullptr) {
+            cout << "ID: " << temp->id << ", Name: " << temp->name << endl;
+            temp = temp->next;
+        }
+    }
+
+    // Function to search for a member by ID
+    void searchMember(int searchId) {
+        ClubMember* temp = head;
+        while (temp != nullptr) {
+            if (temp->id == searchId) {
+                cout << "Member found - ID: " << temp->id << ", Name: " << temp->name << endl;
+                return;
+            }
+            temp = temp->next;
+        }
+
+        cout << "Member with ID " << searchId << " not found." << endl;
+    }
+};
+
+int main() {
+    ClubMemberList membersList;
+
+    // Adding members
+    membersList.addMember(1, "John Doe");
+    membersList.addMember(2, "Jane Smith");
+    membersList.addMember(3, "Bob Johnson");
+
+    // Displaying members
+    membersList.displayMembers();
+
+    // Searching for a member
+    membersList.searchMember(2);
+
+    return 0;
+}
